@@ -11,11 +11,19 @@
   <script type="text/coffeescript">
     CoffeeScript.load "../ooview.js.coffee"
     CoffeeScript.load "ooview_test.js.coffee"
+    CoffeeScript.load "score.js.coffee"
   </script>
 </head>
 <body>
   <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
+  <div id="qunit-fixture">
+
+    <div class="oo-score">
+      <div class="reset"></div>
+      <input type="text" name="score" value="9">
+    </div>
+
+  </div>
 </body>
 </html>
 

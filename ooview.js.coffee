@@ -1,36 +1,46 @@
-ooId = 0
-@oo = {
-  bind: (classname, kls)->
-    oo._binds[classname] = kls
-    for dom in $(".oo-#{classname}")
-      oo._bindElement(kls, dom)
+(($)->
 
-  update: ->
-    for classname, kls of oo._binds
-      for dom in $(".oo-#{classname}").not("[ooId]")
-        oo._bindElement(kls, dom)
-    removed = []
-    for id, obj of oo._instances
-      if $("[ooId=#{id}]").length == 0
-        removed.push id
-    for id in removed
-      delete oo._instances[id]
+  if ($.oo != undefined)
+    $.error('OOView has already been loaded!')
 
-  instance: (element)=>
-    oo._instances[element.attr("ooId")]
+  ooId      = 0
+  binds     = {}
+  instances = {}
 
-  _binds: {}
-
-  _instances: {}
-
-  _newId: ->
+  newId =->
     "#{++ooId}"
 
-  _bindElement: (kls, dom) ->
-    id = oo._newId()
+  bindElement =(kls, dom)->
+    id = newId()
     $(dom).attr("ooId", id)
-    oo._instances[id] = new kls($(dom))
-}
+    instances[id] = new kls($(dom))
 
-$.fn.oo =->
-  oo.instance(this)
+  $.oo = {
+    bind: (classname, kls)->
+      binds[classname] = kls
+      for dom in $(".oo-#{classname}")
+        bindElement(kls, dom)
+
+    update: ->
+      for classname, kls of binds
+        for dom in $(".oo-#{classname}").not("[ooId]")
+          bindElement(kls, dom)
+      removed = []
+      for id, obj of instances
+        if $("[ooId=#{id}]").length == 0
+          removed.push id
+      for id in removed
+        delete instances[id]
+
+    instance: (element)->
+      instances[element.attr("ooId")]
+
+    instanceCount: ->
+      Object.keys(instances).length
+
+  }
+
+  $.fn.oo =->
+    $.oo.instance(this)
+
+)(jQuery)

@@ -1,9 +1,10 @@
 (($)->
 
+  # avoid loading OOView twice
   if ($.oo != undefined)
     $.error('OOView has already been loaded!')
 
-  ooId      = 0
+  ooId      = 0  # auto-increment instance id
   binds     = {}
   instances = {}
 

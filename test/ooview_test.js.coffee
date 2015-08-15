@@ -21,10 +21,10 @@ QUnit.test "update() handle inserted html", (assert)->
   ")
   $.oo.update()
   assert.ok($(".new.oo-score").oo() instanceof Score)
-  assert.equal($(".new.oo-score").oo().score(), 2)
+  assert.equal $(".new.oo-score").oo().score(), 2
 
 QUnit.test "update() handle deleted html", (assert)->
   $.oo.bind "score", Score
   $(".oo-score").remove()
   $.oo.update()
-  assert.equal(0, $.oo.instanceCount())
+  assert.equal $.oo.instanceCount(), 0

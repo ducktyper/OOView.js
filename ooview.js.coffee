@@ -14,7 +14,7 @@
   bindElement =(kls, dom)->
     id = newId()
     $(dom).attr("ooId", id)
-    instances[id] = new kls($(dom))
+    instances[id] = new kls(new OOView($(dom)))
 
   $.oo = {
     bind: (classname, kls)->
@@ -45,3 +45,25 @@
     $.oo.instance(this)
 
 )(jQuery)
+
+class OOView
+  constructor: (@dom)->
+    @event = new OOEvent @dom
+  events: (rules)->
+    @event.add rules
+  find: (selector)->
+    @dom.find selector
+
+class OOEvent
+  constructor: (@dom)->
+  add: (rules)->
+    for key, method of rules
+      [action, selector] = @_readKey key
+      @dom.on(action, selector, method)
+
+  _readKey: (key)->
+    split_index = key.indexOf ' '
+    action      = key.substr 0, split_index
+    selector    = key.substr split_index + 1
+    [action, selector]
+

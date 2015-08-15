@@ -1,8 +1,10 @@
 class @Score
-  constructor: (@dom)->
-    $(@dom).find(".reset").click => @reset()
+  constructor: (@view)->
+    @view.events(
+      "click .reset": @reset
+    )
 
-  reset: ->
+  reset: (e)=>
     @setScore(0)
 
   score: ->
@@ -12,4 +14,4 @@ class @Score
     @scoreField().val(score)
 
   scoreField: ->
-    $(@dom).find("input")
+    @view.find("input")

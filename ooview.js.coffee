@@ -36,24 +36,25 @@
 
 )(jQuery)
 
-class OOView
-  constructor: (@dom)->
-    @event = new OOEvent @dom
+class @OOView
+  constructor: (@element)->
+    @event = new OOEvent @element
   events: (rules)->
     @event.add rules
   find: (selector)->
-    @dom.find selector
+    @element.find selector
 
-class OOEvent
-  constructor: (@dom)->
+class @OOEvent
+  constructor: (@element)->
   add: (rules)->
     for key, method of rules
       [action, selector] = @_readKey key
-      @dom.on(action, "> #{selector}, :not([class^='oo-']) #{selector}", method)
+      @element.on(action, "> #{selector}, :not([class^='oo-']) #{selector}", method)
 
   _readKey: (key)->
     split_index = key.indexOf ' '
     action      = key.substr 0, split_index
     selector    = key.substr split_index + 1
+    $.error("oo event selector does not allow ,") if selector.indexOf(',') != -1
     [action, selector]
 

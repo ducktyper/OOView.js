@@ -23,6 +23,17 @@ QUnit.test "set event in constructor", (assert)->
   $(".oo-score .reset").click()
   assert.equal $(".oo-score").oo("score"), 0
 
+QUnit.test "do not fire events in other oo element", (assert)->
+  beforeEach()
+  $(".oo-score").append("<div class='oo-other'><div class='reset'></div></div>")
+  $(".oo-score .oo-other .reset").click()
+  assert.equal $(".oo-score").oo("score"), 9
+
+QUnit.test "send method with argument", (assert)->
+  beforeEach()
+  $(".oo-score").oo("setScore", 2)
+  assert.equal $(".oo-score").oo("score"), 2
+
 QUnit.test "update() handle inserted html", (assert)->
   beforeEach()
   $(".oo-score .reset").click()

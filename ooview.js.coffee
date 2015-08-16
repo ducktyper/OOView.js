@@ -27,11 +27,12 @@
       $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
   }
 
-  $.fn.oo =(method)->
+  $.fn.oo =(method,args...)->
+    instance = $.oo.instance(this)
     if method?
-      $.oo.instance(this)[method]()
+      instance[method].apply(instance, args)
     else
-      $.oo.instance(this)
+      instance
 
 )(jQuery)
 
@@ -48,7 +49,7 @@ class OOEvent
   add: (rules)->
     for key, method of rules
       [action, selector] = @_readKey key
-      @dom.on(action, selector, method)
+      @dom.on(action, "> #{selector}, :not([class^='oo-']) #{selector}", method)
 
   _readKey: (key)->
     split_index = key.indexOf ' '

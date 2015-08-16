@@ -1,30 +1,37 @@
-QUnit.test "bind class to element", (assert)->
+fixture = $("#qunit-fixture")
+htmlScore = '
+  <div class="oo-score">
+    <div class="reset"></div>
+    <input type="text" name="score" value="9">
+  </div>
+  '
+beforeEach =->
+  $.oo.update()
+  fixture.append(htmlScore)
   $.oo.bind "score", Score
+
+QUnit.test "bind class to element", (assert)->
+  beforeEach()
   assert.ok $(".oo-score").oo() instanceof Score
 
 QUnit.test "get binded instance", (assert)->
-  $.oo.bind "score", Score
+  beforeEach()
   assert.equal $(".oo-score").oo().score(), 9
 
 QUnit.test "set event in constructor", (assert)->
-  $.oo.bind "score", Score
+  beforeEach()
   $(".oo-score .reset").click()
   assert.equal $(".oo-score").oo().score(), 0
 
 QUnit.test "update() handle inserted html", (assert)->
-  $.oo.bind "score", Score
-  $("#qunit-fixture").append("
-    <div class='new oo-score'>
-      <div class='reset'></div>
-      <input type='text' name='score' value='2'>
-    </div>
-  ")
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.append(htmlScore)
   $.oo.update()
-  assert.ok($(".new.oo-score").oo() instanceof Score)
-  assert.equal $(".new.oo-score").oo().score(), 2
+  assert.equal $(".oo-score:last").oo().score(), 9
 
 QUnit.test "update() handle deleted html", (assert)->
-  $.oo.bind "score", Score
+  beforeEach()
   $(".oo-score").remove()
   $.oo.update()
   assert.equal $.oo.instanceCount(), 0

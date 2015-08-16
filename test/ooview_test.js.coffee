@@ -10,26 +10,26 @@ beforeEach =->
   fixture.append(htmlScore)
   $.oo.bind "score", Score
 
-QUnit.test "bind class to element", (assert)->
+QUnit.test "bind view object to element", (assert)->
   beforeEach()
   assert.ok $(".oo-score").oo() instanceof Score
 
-QUnit.test "get binded instance", (assert)->
+QUnit.test "get view object", (assert)->
   beforeEach()
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "set event in constructor", (assert)->
+QUnit.test "send message to view object", (assert)->
   beforeEach()
   $(".oo-score .reset").click()
   assert.equal $(".oo-score").oo("score"), 0
 
-QUnit.test "do not fire events in other oo element", (assert)->
+QUnit.test "events not valid to child oo view", (assert)->
   beforeEach()
   $(".oo-score").append("<div class='oo-other'><div class='reset'></div></div>")
   $(".oo-score .oo-other .reset").click()
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "do not allow , in events rule", (assert)->
+QUnit.test "event rule does not allow ,", (assert)->
   beforeEach()
   event = new OOEvent($(".oo-score"))
   assert.throws(->event.add("click .reset, .zero": (->)))

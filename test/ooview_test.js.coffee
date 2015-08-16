@@ -16,19 +16,19 @@ QUnit.test "bind class to element", (assert)->
 
 QUnit.test "get binded instance", (assert)->
   beforeEach()
-  assert.equal $(".oo-score").oo().score(), 9
+  assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "set event in constructor", (assert)->
   beforeEach()
   $(".oo-score .reset").click()
-  assert.equal $(".oo-score").oo().score(), 0
+  assert.equal $(".oo-score").oo("score"), 0
 
 QUnit.test "update() handle inserted html", (assert)->
   beforeEach()
   $(".oo-score .reset").click()
   fixture.append(htmlScore)
   $.oo.update()
-  assert.equal $(".oo-score:last").oo().score(), 9
+  assert.equal $(".oo-score:last").oo("score"), 9
 
 QUnit.test "update() handle deleted html", (assert)->
   beforeEach()

@@ -27,8 +27,11 @@
       $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
   }
 
-  $.fn.oo =->
-    $.oo.instance(this)
+  $.fn.oo =(method)->
+    if method?
+      $.oo.instance(this)[method]()
+    else
+      $.oo.instance(this)
 
 )(jQuery)
 

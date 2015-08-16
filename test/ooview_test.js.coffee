@@ -29,6 +29,11 @@ QUnit.test "do not fire events in other oo element", (assert)->
   $(".oo-score .oo-other .reset").click()
   assert.equal $(".oo-score").oo("score"), 9
 
+QUnit.test "do not allow , in events rule", (assert)->
+  beforeEach()
+  event = new OOEvent($(".oo-score"))
+  assert.throws(->event.add("click .reset, .zero": (->)))
+
 QUnit.test "send method with argument", (assert)->
   beforeEach()
   $(".oo-score").oo("setScore", 2)

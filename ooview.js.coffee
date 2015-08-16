@@ -4,17 +4,10 @@
   if ($.oo != undefined)
     $.error('OOView has already been loaded!')
 
-  ooId      = 0  # auto-increment instance id
-  binds     = {}
-  instances = {}
-
-  newId =->
-    "#{++ooId}"
+  binds = {}
 
   bindElement =(kls, dom)->
-    id = newId()
-    $(dom).attr("ooId", id)
-    instances[id] = new kls(new OOView($(dom)))
+    $(dom).data("oo", new kls(new OOView($(dom))))
 
   $.oo = {
     bind: (classname, kls)->
@@ -24,21 +17,14 @@
 
     update: ->
       for classname, kls of binds
-        for dom in $(".oo-#{classname}").not("[ooId]")
+        for dom in $(".oo-#{classname}").filter(-> !$(this).data('oo')?)
           bindElement(kls, dom)
-      removed = []
-      for id, obj of instances
-        if $("[ooId=#{id}]").length == 0
-          removed.push id
-      for id in removed
-        delete instances[id]
 
     instance: (element)->
-      instances[element.attr("ooId")]
+      element.data("oo")
 
     instanceCount: ->
-      Object.keys(instances).length
-
+      $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
   }
 
   $.fn.oo =->

@@ -46,6 +46,18 @@ QUnit.test "update() handle inserted html", (assert)->
   $.oo.update()
   assert.equal $(".oo-score:last").oo("score"), 9
 
+QUnit.test "ooAppend to append and update", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.ooAppend(htmlScore)
+  assert.equal $(".oo-score:last").oo("score"), 9
+
+QUnit.test "ooPrepend to prepend and update", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.ooPrepend(htmlScore)
+  assert.equal $(".oo-score:first").oo("score"), 9
+
 QUnit.test "update() handle deleted html", (assert)->
   beforeEach()
   $(".oo-score").remove()

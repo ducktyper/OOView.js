@@ -34,6 +34,16 @@
     else
       instance
 
+  $.fn.ooAppend =(args...)->
+    out = this.append.apply(this, args)
+    $.oo.update()
+    out
+
+  $.fn.ooPrepend =(args...)->
+    out = this.prepend.apply(this, args)
+    $.oo.update()
+    out
+
 )(jQuery)
 
 class @OOView

@@ -20,6 +20,9 @@
         for dom in $(".oo-#{classname}").filter(-> !$(this).data('oo')?)
           bindElement(kls, dom)
 
+    view: (classname, data, html="")->
+      "<div class=\"oo-#{classname}\" oo=#{JSON.stringify(data)}>#{html}</div>"
+
     instance: (element)->
       element.data("oo") || $.error("No OOView to element(.#{element.attr('class')})")
 

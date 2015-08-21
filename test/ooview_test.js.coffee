@@ -79,3 +79,12 @@ QUnit.test "oo attributes to data", (assert)->
   $(".oo-score").attr("oo", JSON.stringify(name: "bob"))
   $.oo.bind "score", Score
   assert.equal $(".oo-score").oo().view.data.name, "bob"
+
+QUnit.test "oo.view generates html", (assert)->
+  html = $.oo.view("score", score: 1, name: "score1")
+  assert.equal html, '<div class="oo-score" oo={"score":1,"name":"score1"}></div>'
+
+QUnit.test "oo.view generates html with content", (assert)->
+  html = $.oo.view("score", score: 1, name: "score1", "<div>content</div>")
+  assert.equal html,
+    '<div class="oo-score" oo={"score":1,"name":"score1"}><div>content</div></div>'

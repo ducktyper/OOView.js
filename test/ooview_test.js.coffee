@@ -25,14 +25,15 @@ QUnit.test "send message to view object", (assert)->
 
 QUnit.test "events not valid to child oo view", (assert)->
   beforeEach()
-  $(".oo-score").append("<div class='oo-other'><div class='reset'></div></div>")
+  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
   $(".oo-score .oo-other .reset").click()
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "event rule does not allow ,", (assert)->
+QUnit.test "OOView does not find child oo view", (assert)->
   beforeEach()
-  event = new OOEvent($(".oo-score"))
-  assert.throws(->event.add("click .reset, .zero": (->)))
+  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
+  view = new OOView($(".oo-score"))
+  assert.equal view.find(".reset").length, 1
 
 QUnit.test "send method with argument", (assert)->
   beforeEach()

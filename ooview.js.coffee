@@ -51,6 +51,9 @@
 
 class OOView
   constructor: (@element)->
+    @data = {}
+    if @element.attr("oo")?
+      @data = JSON.parse(@element.attr("oo"))
     @event = new OOEvent @element
   events: (rules)->
     @event.add rules

@@ -72,3 +72,10 @@ QUnit.test "error on accessing oo instance not exist", (assert)->
 QUnit.test "error on sending message not exist", (assert)->
   beforeEach()
   assert.throws(-> $(".oo-score").oo("notDefined"))
+
+QUnit.test "oo attributes to data", (assert)->
+  $.oo.update()
+  fixture.append(htmlScore)
+  $(".oo-score").attr("oo", JSON.stringify(name: "bob"))
+  $.oo.bind "score", Score
+  assert.equal $(".oo-score").oo().view.data.name, "bob"

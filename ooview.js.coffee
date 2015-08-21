@@ -21,7 +21,7 @@
           bindElement(kls, dom)
 
     instance: (element)->
-      element.data("oo")
+      element.data("oo") || $.error("No OOView to element(.#{element.attr('class')})")
 
     instanceCount: ->
       $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
@@ -30,7 +30,10 @@
   $.fn.oo =(method,args...)->
     instance = $.oo.instance(this)
     if method?
-      instance[method].apply(instance, args)
+      if instance[method]?
+        instance[method].apply(instance, args)
+      else
+        $.error("No OOView Method(#{method}) to element(.#{@.attr('class')})")
     else
       instance
 

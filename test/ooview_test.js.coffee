@@ -64,3 +64,12 @@ QUnit.test "update() handle deleted html", (assert)->
   $(".oo-score").remove()
   $.oo.update()
   assert.equal $.oo.instanceCount(), 0
+
+QUnit.test "error on accessing oo instance not exist", (assert)->
+  beforeEach()
+  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
+  assert.throws(-> $(".oo-other").oo())
+
+QUnit.test "error on sending message not exist", (assert)->
+  beforeEach()
+  assert.throws(-> $(".oo-score").oo("notDefined"))

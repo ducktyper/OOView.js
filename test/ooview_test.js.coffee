@@ -31,9 +31,8 @@ QUnit.test "events not valid to child oo view", (assert)->
 
 QUnit.test "OOView does not find child oo view", (assert)->
   beforeEach()
-  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
-  view = new OOView($(".oo-score"))
-  assert.equal view.find(".reset").length, 1
+  $(".oo-score").ooAppend("<div class='oo-other'><input></div>")
+  assert.equal $(".oo-score").oo("scoreField").length, 1
 
 QUnit.test "send method with argument", (assert)->
   beforeEach()

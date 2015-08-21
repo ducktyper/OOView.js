@@ -49,7 +49,7 @@
 
 )(jQuery)
 
-class @OOView
+class OOView
   constructor: (@element)->
     @event = new OOEvent @element
   events: (rules)->
@@ -59,7 +59,7 @@ class @OOView
   _directSelector: (selector)->
     selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")
 
-class @OOEvent
+class OOEvent
   constructor: (@element)->
   add: (rules)->
     for key, method of rules

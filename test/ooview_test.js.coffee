@@ -6,7 +6,6 @@ htmlScore = '
   </div>
   '
 beforeEach =->
-  $.oo.update()
   fixture.append(htmlScore)
   $.oo.bind "score", Score
 

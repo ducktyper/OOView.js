@@ -87,3 +87,14 @@ QUnit.test "oo.view generates html with content", (assert)->
   html = $.oo.view("score", score: 1, name: "score1", "<div>content</div>")
   assert.equal html,
     '<div class="oo-score" oo={"score":1,"name":"score1"}><div>content</div></div>'
+
+QUnit.test "view.action adds temp events", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 10
+  e.which = 40 # down
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 9

@@ -60,6 +60,8 @@ class OOView
     @event = new OOEvent @element
   events: (rules)->
     @event.add rules
+  action: (rules)->
+    @current_action = new OOAction rules
   find: (selector)->
     @element.find(@_directSelector(selector))
   _directSelector: (selector)->
@@ -81,3 +83,18 @@ class OOEvent
   _directSelector: (selector)->
     selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")
 
+class OOAction
+  constructor: (@rules)->
+    for key, method of @rules
+      [action, selector] = @_readKey key
+      $(selector).on(action, method)
+
+  _readKey: (key)->
+    split_index = key.indexOf ' '
+    return [key, document] if split_index == -1
+    action      = key.substr 0, split_index
+    selector    = key.substr split_index + 1
+    [action, selector]
+
+  _directSelector: (selector)->
+    selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")

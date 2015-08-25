@@ -61,6 +61,7 @@ class OOView
   events: (rules)->
     @event.add rules
   action: (rules)->
+    @current_action.finish() if @current_action?
     @current_action = new OOAction rules
   find: (selector)->
     @element.find(@_directSelector(selector))
@@ -85,9 +86,44 @@ class OOEvent
 
 class OOAction
   constructor: (@rules)->
-    for key, method of @rules
+    @_onEvents(@rules)
+    @_onEvents(@_defaultRules())
+
+  desctuctor: =>
+    return if @desctucted
+    @desctucted = true
+    @_offEvents(@rules)
+    @_offEvents(@_defaultRules())
+
+  finish: =>
+    @desctuctor()
+
+  cancel: =>
+    @cancel_action() if @cancel_action?
+    @desctuctor()
+
+  _cancelOnEsc: (e)=>
+    @cancel() if e.which == 27 #ESC
+
+  _defaultRules: ->
+    @default_rules ||= {
+      "click": @finish
+      "keypress": @_cancelOnEsc
+    }
+
+  _onEvents: (rules)->
+    for key, method of rules
       [action, selector] = @_readKey key
-      $(selector).on(action, method)
+      switch action
+        when "cancel" then @cancel_action = method
+        else $(selector).on(action, method)
+
+  _offEvents: (rules)->
+    for key, method of rules
+      [action, selector] = @_readKey key
+      switch action
+        when "cancel" then @cancel_action = undefined
+        else $(selector).off(action, method)
 
   _readKey: (key)->
     split_index = key.indexOf ' '

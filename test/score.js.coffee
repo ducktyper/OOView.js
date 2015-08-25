@@ -9,15 +9,7 @@ class @Score
     @setScore(0)
 
   editScore: (e)=>
-    @view.action(
-      "keypress": @upDownKey
-    )
-
-  upDownKey: (e)=>
-    if e.which == 38
-      @setScore(@score() + 1)
-    if e.which == 40
-      @setScore(@score() - 1)
+    new EditScore(@)
 
   score: ->
     parseInt(@scoreField().val(), 0)
@@ -27,3 +19,20 @@ class @Score
 
   scoreField: ->
     @view.find("input")
+
+class EditScore
+  constructor: (@oo)->
+    @backup = @oo.score()
+    @oo.view.action(
+      "keypress": @upDownKey
+      "cancel": @rollback
+    )
+
+  rollback: =>
+    @oo.setScore(@backup)
+
+  upDownKey: (e)=>
+    if e.which == 38
+      @oo.setScore(@oo.score() + 1)
+    if e.which == 40
+      @oo.setScore(@oo.score() - 1)

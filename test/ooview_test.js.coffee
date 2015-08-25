@@ -98,3 +98,42 @@ QUnit.test "view.action adds temp events", (assert)->
   e.which = 40 # down
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
+
+QUnit.test "view.action finishes on click by default", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  $(".oo-score").click()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 9
+
+QUnit.test "cancel view.action by click esc", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  fixture.find("input").trigger(e)
+  e.which = 27 # esc
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 9
+
+QUnit.test "cancel view.action calls callback", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  fixture.find("input").trigger(e)
+  e.which = 27 # ESC
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 9
+
+QUnit.test "new view.action finishes old one", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  fixture.find("input").focus()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  fixture.find("input").trigger(e)
+  assert.equal $(".oo-score").oo("score"), 10
+

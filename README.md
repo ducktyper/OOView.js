@@ -46,13 +46,14 @@ From the code example, call @view.find("input") from Score object attached to
 
 #### Get OOView object from jQuery element
 ```coffeescript
-$("oo-score).oo() # return javascript object associated with given OOView element
-$("oo-score).oo("score") # get javascript object and call "score" method
-$("oo-score).oo("set", 1) # get javascript object and call "set" method with one argument
+$(".oo-score").oo() # return javascript object associated with given OOView element
+$(".oo-score").oo("score") # get javascript object and call "score" method
+$(".oo-score").oo("set", 10) # get javascript object and call "set" method with one argument
 ```
 
 #### Attach new OOView objects to dynamically inserted HTML
 ```coffeescript
+# full version
 $("body").append('<div class="oo-score"></div>')
 $.oo.update()
 # shortcut (include calling $.oo.update())
@@ -61,7 +62,7 @@ $("body").ooPrepend('<div class="oo-score"></div>')
 ```
 
 #### @view.events
-You can set permanent events under associated element using "events" method
+You can set permanent events under associated element using "events" method.
 Syntax was influenced by backbone.js
 ```coffeescript
 class @Score
@@ -82,7 +83,7 @@ class @Score
     parseInt(@view.find("input").val())
 ```
 events method sets click events to reset and add score by one.
-"reset: =>" is used instead "reset: ->" to call in @view object
+"reset: =>" is used instead "reset: ->" to be called from @view object
 
 #### @view.action
 You can set temp events under associated element using "action" method
@@ -108,7 +109,7 @@ class @Score
 Using this code, a user can use up and down key to change score
 after input field is focused.
 * if no selector is given then it assign to "document" (e.g. "keypress")
-* activated action events can be removed from 3 ways
+* activated action events can be removed by 3 ways
   * call another action method
   * press ESC key
   * click anywhere

@@ -31,14 +31,16 @@
   }
 
   $.fn.oo =(method,args...)->
-    instance = $.oo.instance(this)
-    if method?
+    return $.oo.instance(this) unless method?
+    return $.error("No OOView Method(#{method}) to undefined") if this.length == 0
+    last_result = undefined
+    this.each ->
+      instance = $.oo.instance($(this))
       if instance[method]?
-        instance[method].apply(instance, args)
+        last_result = instance[method].apply(instance, args)
       else
-        $.error("No OOView Method(#{method}) to element(.#{@.attr('class')})")
-    else
-      instance
+        $.error("No OOView Method(#{method}) to element(.#{$(this).attr('class')})")
+    last_result
 
   $.fn.ooAppend =(args...)->
     out = this.append.apply(this, args)

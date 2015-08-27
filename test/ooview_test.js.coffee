@@ -22,6 +22,21 @@ QUnit.test "send message to view object", (assert)->
   $(".oo-score .reset").click()
   assert.equal $(".oo-score").oo("score"), 0
 
+QUnit.test "send message to view object", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  assert.equal $(".oo-score").oo("score"), 0
+
+QUnit.test "send message apply to all matched element", (assert)->
+  beforeEach()
+  fixture.ooAppend(htmlScore)
+  $(".oo-score").oo("setScore", 5)
+  $(".oo-score").each -> assert.equal $(this).oo("score"), 5
+
+QUnit.test "error on sending message to element not exist", (assert)->
+  beforeEach()
+  assert.throws(-> $(".oo-other").oo())
+
 QUnit.test "events not valid to child oo view", (assert)->
   beforeEach()
   $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")

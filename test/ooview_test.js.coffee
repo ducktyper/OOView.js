@@ -152,3 +152,13 @@ QUnit.test "new view.action finishes old one", (assert)->
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 10
 
+QUnit.test "window resize call resize method", (assert)->
+  beforeEach()
+  oo = fixture.find(".oo-score").oo()
+  oo.resize =-> oo.setScore(100)
+  $(window).resize()
+  assert.equal $(".oo-score").oo("score"), 100
+
+QUnit.test "window resize ignore oo views not have resize method", (assert)->
+  beforeEach()
+  assert.ok($(window).resize())

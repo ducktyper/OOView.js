@@ -84,6 +84,18 @@ class @Score
 ```
 events method sets click events to reset and add score by one.
 
+#### resize method
+Since window resize event is attached to window not the view,
+the event will survive after view is removed from the dom.
+Instead OOView listens to window resize event and sends resize method to
+each oo objects if resize method is defined.
+```coffeescript
+class @Score
+  constructor: (@view)->
+  resize: ->
+    console.debug "called on window resize"
+```
+
 #### @view.action
 You can set temp events under associated element using "action" method
 ```coffeescript

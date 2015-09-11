@@ -28,6 +28,11 @@
 
     instanceCount: ->
       $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
+
+    resize: ->
+      $('[class^="oo-"]').each ->
+        if $(this).data('oo')? && $(this).data('oo').resize?
+          $(this).data('oo').resize()
   }
 
   $.fn.oo =(method,args...)->
@@ -51,6 +56,8 @@
     out = this.prepend.apply(this, args)
     $.oo.update()
     out
+
+  $(window).resize -> $.oo.resize()
 
 )(jQuery)
 

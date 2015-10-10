@@ -70,6 +70,9 @@ class @Score
     @view.events(@,
       "click .reset": 'reset'
       "click .plus":  'plusScore'
+      "mouseenter":   -> $(@).addClass("highlight")
+      # => @view.element.on("mouseenter", -> $(@).addClass("highlight"))
+      "mouseleave":   -> $(@).removeClass("highlight")
     )
 
   reset: ->
@@ -82,7 +85,21 @@ class @Score
   score: ->
     parseInt(@view.find("input").val())
 ```
-events method sets click events to reset and add score by one.
+Codes obove generate events below
+```coffeescript
+@view.element.on(
+  "click", ".reset, :not([class^='oo-']) .reset", @["reset"].bind(@)
+)
+@view.element.on(
+  "click", ".plus, :not([class^='oo-']) .plus", @["plusScore"].bind(@)
+)
+@view.element.on(
+  "mouseenter", -> $(@).addClass("highlight")
+)
+@view.element.on(
+  "mouseleave", -> $(@).removeClass("highlight")
+)
+```
 
 #### resize method
 Since window resize event is attached to window not the view,

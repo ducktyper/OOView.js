@@ -9,101 +9,94 @@ beforeEach =->
   fixture.append(htmlScore)
   $.oo.bind "score", Score
 
-QUnit.test "bind view object to element", (assert)->
+# get object
+QUnit.test "get object", (assert)->
   beforeEach()
   assert.ok $(".oo-score").oo() instanceof Score
 
-QUnit.test "get view object", (assert)->
+QUnit.test "can't get object not exist", (assert)->
+  beforeEach()
+  assert.throws(-> $(".oo-other").oo())
+
+# send message
+QUnit.test "send message to object", (assert)->
   beforeEach()
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "send message to view object", (assert)->
-  beforeEach()
-  $(".oo-score .reset").click()
-  assert.equal $(".oo-score").oo("score"), 0
-
-QUnit.test "send message to view object", (assert)->
-  beforeEach()
-  $(".oo-score .reset").click()
-  assert.equal $(".oo-score").oo("score"), 0
-
-QUnit.test "send message apply to all matched element", (assert)->
+QUnit.test "send message with args to objects", (assert)->
   beforeEach()
   fixture.ooAppend(htmlScore)
   $(".oo-score").oo("setScore", 5)
   $(".oo-score").each -> assert.equal $(this).oo("score"), 5
 
-QUnit.test "error on sending message to element not exist", (assert)->
-  beforeEach()
-  assert.throws(-> $(".oo-other").oo())
-
-QUnit.test "events not valid to child oo view", (assert)->
-  beforeEach()
-  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
-  $(".oo-score .oo-other .reset").click()
-  assert.equal $(".oo-score").oo("score"), 9
-
-QUnit.test "OOView does not find child oo view", (assert)->
-  beforeEach()
-  $(".oo-score").ooAppend("<div class='oo-other'><input></div>")
-  assert.equal $(".oo-score").oo("scoreField").length, 1
-
-QUnit.test "send method with argument", (assert)->
-  beforeEach()
-  $(".oo-score").oo("setScore", 2)
-  assert.equal $(".oo-score").oo("score"), 2
-
-QUnit.test "update() handle inserted html", (assert)->
-  beforeEach()
-  $(".oo-score .reset").click()
-  fixture.append(htmlScore)
-  $.oo.update()
-  assert.equal $(".oo-score:last").oo("score"), 9
-
-QUnit.test "ooAppend to append and update", (assert)->
-  beforeEach()
-  $(".oo-score .reset").click()
-  fixture.ooAppend(htmlScore)
-  assert.equal $(".oo-score:last").oo("score"), 9
-
-QUnit.test "ooPrepend to prepend and update", (assert)->
-  beforeEach()
-  $(".oo-score .reset").click()
-  fixture.ooPrepend(htmlScore)
-  assert.equal $(".oo-score:first").oo("score"), 9
-
-QUnit.test "update() handle deleted html", (assert)->
-  beforeEach()
-  $(".oo-score").remove()
-  $.oo.update()
-  assert.equal $.oo.instanceCount(), 0
-
-QUnit.test "error on accessing oo instance not exist", (assert)->
-  beforeEach()
-  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
-  assert.throws(-> $(".oo-other").oo())
-
-QUnit.test "error on sending message not exist", (assert)->
+QUnit.test "can't send message to object don't know", (assert)->
   beforeEach()
   assert.throws(-> $(".oo-score").oo("notDefined"))
 
-QUnit.test "oo attributes to data", (assert)->
+# initial data
+QUnit.test "#data reads data from 'oo' attributes", (assert)->
   $.oo.update()
   fixture.append(htmlScore)
   $(".oo-score").attr("oo", JSON.stringify(name: "bob"))
   $.oo.bind "score", Score
   assert.equal $(".oo-score").oo().view.data.name, "bob"
 
-QUnit.test "oo.view generates html", (assert)->
+# find()
+QUnit.test "#find does not search child oo views", (assert)->
+  beforeEach()
+  $(".oo-score").ooAppend("<div class='oo-other'><input></div>")
+  assert.equal $(".oo-score").oo().view.find("input").length, 1
+
+# dynamic content
+QUnit.test "#update assigns object to inserted html", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.append(htmlScore)
+  $.oo.update()
+  assert.equal $(".oo-score:last").oo("score"), 9
+
+QUnit.test "#update handle deleted html", (assert)->
+  beforeEach()
+  $(".oo-score").remove()
+  $.oo.update()
+  assert.equal $.oo.instanceCount(), 0
+
+QUnit.test "#ooAppend to append and #update", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.ooAppend(htmlScore)
+  assert.equal $(".oo-score:last").oo("score"), 9
+
+QUnit.test "#ooPrepend to prepend and #update", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  fixture.ooPrepend(htmlScore)
+  assert.equal $(".oo-score:first").oo("score"), 9
+
+# html builder
+QUnit.test "#view generates default html with data", (assert)->
   html = $.oo.view("score", score: 1, name: "score1")
   assert.equal html, '<div class="oo-score" oo={"score":1,"name":"score1"}></div>'
 
-QUnit.test "oo.view generates html with content", (assert)->
+QUnit.test "#view generates default html with data and content", (assert)->
   html = $.oo.view("score", score: 1, name: "score1", "<div>content</div>")
   assert.equal html,
     '<div class="oo-score" oo={"score":1,"name":"score1"}><div>content</div></div>'
 
-QUnit.test "view.action adds temp events", (assert)->
+# events()
+QUnit.test "set events", (assert)->
+  beforeEach()
+  $(".oo-score .reset").click()
+  assert.equal $(".oo-score").oo("score"), 0
+
+QUnit.test "ignore events propagated from child objects", (assert)->
+  beforeEach()
+  $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")
+  $(".oo-score .oo-other .reset").click()
+  assert.equal $(".oo-score").oo("score"), 9
+
+# action()
+QUnit.test "action can listen document events", (assert)->
   beforeEach()
   fixture.find("input").focus()
   e = $.Event("keypress")
@@ -114,7 +107,7 @@ QUnit.test "view.action adds temp events", (assert)->
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "view.action finishes on click by default", (assert)->
+QUnit.test "action ends on clicking anywhere", (assert)->
   beforeEach()
   fixture.find("input").focus()
   $(".oo-score").click()
@@ -123,7 +116,7 @@ QUnit.test "view.action finishes on click by default", (assert)->
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "cancel view.action by click esc", (assert)->
+QUnit.test "action ends on esc", (assert)->
   beforeEach()
   fixture.find("input").focus()
   e = $.Event("keypress")
@@ -133,20 +126,10 @@ QUnit.test "cancel view.action by click esc", (assert)->
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "cancel view.action calls callback", (assert)->
+QUnit.test "object can have only one active action", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  e = $.Event("keypress")
-  e.which = 38 # up
-  fixture.find("input").trigger(e)
-  e.which = 27 # ESC
-  fixture.find("input").trigger(e)
-  assert.equal $(".oo-score").oo("score"), 9
-
-QUnit.test "new view.action finishes old one", (assert)->
-  beforeEach()
-  fixture.find("input").focus()
-  fixture.find("input").focus()
+  fixture.find("input").focus() # finish prev action
   e = $.Event("keypress")
   e.which = 38 # up
   fixture.find("input").trigger(e)

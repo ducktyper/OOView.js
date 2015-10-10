@@ -89,6 +89,18 @@ QUnit.test "set events", (assert)->
   $(".oo-score .reset").click()
   assert.equal $(".oo-score").oo("score"), 0
 
+QUnit.test "set events to self", (assert)->
+  beforeEach()
+  $(".oo-score").oo().view.events(
+    "mouseenter": -> $(@).addClass("highlight")
+    "mouseleave": -> $(@).removeClass("highlight")
+  )
+  $(".oo-score").mouseenter()
+  assert.equal $(".oo-score").hasClass("highlight"), true
+  $(".oo-score").mouseleave()
+  assert.equal $(".oo-score").hasClass("highlight"), false
+
+
 QUnit.test "ignore events propagated from child objects", (assert)->
   beforeEach()
   $(".oo-score").ooAppend("<div class='oo-other'><div class='reset'></div></div>")

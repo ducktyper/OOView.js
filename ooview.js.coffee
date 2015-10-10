@@ -74,10 +74,14 @@ class OOEvent
   add: (rules)->
     for key, method of rules
       [action, selector] = @_readKey key
-      @element.on(action, @_directSelector(selector), method)
+      if selector
+        @element.on(action, @_directSelector(selector), method)
+      else
+        @element.on(action, method)
 
   _readKey: (key)->
     split_index = key.indexOf ' '
+    return [key, null] if split_index == -1
     action      = key.substr 0, split_index
     selector    = key.substr split_index + 1
     [action, selector]

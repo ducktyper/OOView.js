@@ -91,7 +91,7 @@ QUnit.test "set events", (assert)->
 
 QUnit.test "set events to self", (assert)->
   beforeEach()
-  $(".oo-score").oo().view.events(
+  $(".oo-score").oo().view.events(@,
     "mouseenter": -> $(@).addClass("highlight")
     "mouseleave": -> $(@).removeClass("highlight")
   )

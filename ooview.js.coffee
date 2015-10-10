@@ -90,7 +90,7 @@ class OOEvent
       if selector
         @element.on(action, @_directSelector(selector), convertMethod(obj, method))
       else
-        @element.on(action, method)
+        @element.on(action, convertMethod(obj, method))
 
   _readKey: (key)->
     split_index = key.indexOf ' '

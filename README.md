@@ -1,6 +1,48 @@
 ## OOView.js (Object-Oriented View in Javascript)
-OOView.js a jQuery plugin helps to automatically create javascript objects
+OOView.js a light (less than 200 lines) jQuery plugin helps
+to automatically create Javascript objects
 and bind to specified dom elements on initial and dynamic load.
+The code is written in Coffeescript but you can transpile it to javascript
+and use it with Javascript, ES6 with Babel or any way you like.
+
+### How to use
+1. Copy ooview.js.coffee to your project.
+(if you need Javascript file, one quick way to transpile is using
+'TRY COFFEESCRIPT' from coffeescript.org)
+2. Create OOView HTML component (e.g. "score")
+```html
+<div class='oo-score' oo='{"score":10}'>
+// Content goes here
+</div>
+```
+Same Html can be generated from Javasript by calling
+```coffeescript
+html = $.oo.view("score", {score: 10}, "// Content goes here")
+```
+3. Create OOView class and bind it
+```coffeescript
+class Score
+  constructor: (@view)->
+    @view.events(@,
+      "click .reset": "reset"
+    )
+  reset: ->
+    setScore(0)
+  getScore: ->
+    @view.find("input").val()
+  setScore: (score)->
+    @view.find("input").val(score)
+
+$.oo.bind "score", Score
+```
+
+4. Use OOView
+```coffeescript
+score = $(".oo-view").oo("getScore")
+$(".oo-view").oo("setScore", 5)
+obj = $(".oo-view").oo()
+obj.setScore(5)
+```
 
 ### Basic binding
 COFFEESCRIPT

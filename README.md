@@ -67,14 +67,14 @@ Syntax was influenced by backbone.js
 ```coffeescript
 class @Score
   constructor: (@view)->
-    @view.events(
-      "click .reset": @reset
-      "click .plus":  @plusScore
+    @view.events(@,
+      "click .reset": 'reset'
+      "click .plus":  'plusScore'
     )
 
-  reset: =>
+  reset: ->
     @setScore(0)
-  plusScore: =>
+  plusScore: ->
     @setScore(@score() + 1)
 
   setScore: (score)->
@@ -83,21 +83,32 @@ class @Score
     parseInt(@view.find("input").val())
 ```
 events method sets click events to reset and add score by one.
-"reset: =>" is used instead "reset: ->" to be called from @view object
+
+#### resize method
+Since window resize event is attached to window not the view,
+the event will survive after view is removed from the dom.
+Instead OOView listens to window resize event and sends resize method to
+each oo objects if resize method is defined.
+```coffeescript
+class @Score
+  constructor: (@view)->
+  resize: ->
+    console.debug "called on window resize"
+```
 
 #### @view.action
 You can set temp events under associated element using "action" method
 ```coffeescript
 class @Score
   constructor: (@view)->
-    @view.events("focus input": @keyboardEdit)
+    @view.events(@, "focus input": 'keyboardEdit')
 
-  keyboardEdit: =>
-    @view.action(
-      "keypress": @upDown
+  keyboardEdit: ->
+    @view.action(@,
+      "keypress": 'upDown'
     )
 
-  upDownKey: (e)=>
+  upDownKey: (e)->
     @setScore(@score() + 1) if e.which == 38 #up
     @setScore(@score() - 1) if e.which == 40 #down
 
@@ -113,7 +124,6 @@ after input field is focused.
   * call another action method
   * press ESC key
   * click anywhere
-
 
 ### Run tests
 Qunit is used to test OOView.js

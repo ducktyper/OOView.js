@@ -28,6 +28,11 @@
 
     instanceCount: ->
       $('[class^="oo-"]').filter(-> $(this).data('oo')?).length
+
+    resize: ->
+      $('[class^="oo-"]').each ->
+        if $(this).data('oo')? && $(this).data('oo').resize?
+          $(this).data('oo').resize()
   }
 
   $.fn.oo =(method,args...)->
@@ -51,6 +56,8 @@
     $.oo.update()
     out
 
+  $(window).resize -> $.oo.resize()
+
 )(jQuery)
 
 class OOView
@@ -59,23 +66,29 @@ class OOView
     if @element.attr("oo")?
       @data = JSON.parse(@element.attr("oo"))
     @event = new OOEvent @element
-  events: (rules)->
-    @event.add rules
-  action: (rules)->
+  events: (obj, rules)->
+    @event.add obj, rules
+  action: (obj, rules)->
     @current_action.finish() if @current_action?
-    @current_action = new OOAction rules
+    @current_action = new OOAction obj, rules
   find: (selector)->
     @element.find(@_directSelector(selector))
   _directSelector: (selector)->
     selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")
 
+convertMethod = (obj, method)->
+  if typeof method == "string"
+    obj[method].bind(obj)
+  else
+    method
+
 class OOEvent
   constructor: (@element)->
-  add: (rules)->
+  add: (obj, rules)->
     for key, method of rules
       [action, selector] = @_readKey key
       if selector
-        @element.on(action, @_directSelector(selector), method)
+        @element.on(action, @_directSelector(selector), convertMethod(obj, method))
       else
         @element.on(action, method)
 
@@ -90,30 +103,37 @@ class OOEvent
     selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")
 
 class OOAction
-  constructor: (@rules)->
+  constructor: (@obj, rules)->
+    @rules = @_parseRules(rules)
     @_onEvents(@rules)
     @_onEvents(@_defaultRules())
 
-  desctuctor: =>
+  desctuctor: ->
     return if @desctucted
     @desctucted = true
     @_offEvents(@rules)
     @_offEvents(@_defaultRules())
 
-  finish: =>
+  finish: ->
     @desctuctor()
 
-  cancel: =>
+  cancel: ->
     @cancel_action() if @cancel_action?
     @desctuctor()
+
+  _parseRules: (rules)->
+    new_rules = {}
+    for k, v of rules
+      new_rules[k] = convertMethod(@obj, v)
+    new_rules
 
   _cancelOnEsc: (e)=>
     @cancel() if e.which == 27 #ESC
 
   _defaultRules: ->
     @default_rules ||= {
-      "click": @finish
-      "keypress": @_cancelOnEsc
+      "click":    @finish.bind(@)
+      "keypress": @_cancelOnEsc.bind(@)
     }
 
   _onEvents: (rules)->

@@ -32,7 +32,6 @@
 
   $.fn.oo =(method,args...)->
     return $.oo.instance(this) unless method?
-    return $.error("No OOView Method(#{method}) to undefined") if this.length == 0
     last_result = undefined
     this.each ->
       instance = $.oo.instance($(this))

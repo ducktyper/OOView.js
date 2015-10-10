@@ -156,6 +156,3 @@ class OOAction
     action      = key.substr 0, split_index
     selector    = key.substr split_index + 1
     [action, selector]
-
-  _directSelector: (selector)->
-    selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")

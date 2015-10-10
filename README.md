@@ -65,7 +65,7 @@ $("body").ooPrepend('<div class="oo-score"></div>')
 You can set permanent events under associated element using "events" method.
 Syntax was influenced by backbone.js
 ```coffeescript
-class @Score
+class Score
   constructor: (@view)->
     @view.events(@,
       "click .reset": 'reset'
@@ -85,20 +85,21 @@ class @Score
   score: ->
     parseInt(@view.find("input").val())
 ```
-Codes obove generate events below
+Codes above generate events below
 ```coffeescript
-@view.element.on(
-  "click", ".reset, :not([class^='oo-']) .reset", @["reset"].bind(@)
+element = $(".oo-score") element
+score   = 'Score' object associated with the element
+
+element.on("click",
+  ".reset, :not([class^='oo-']) .reset",
+  score["reset"].bind(score)
 )
-@view.element.on(
-  "click", ".plus, :not([class^='oo-']) .plus", @["plusScore"].bind(@)
+element.on("click",
+  ".plus, :not([class^='oo-']) .plus",
+  score["plusScore"].bind(score)
 )
-@view.element.on(
-  "mouseenter", -> $(@).addClass("highlight")
-)
-@view.element.on(
-  "mouseleave", -> $(@).removeClass("highlight")
-)
+element.on("mouseenter", -> $(@).addClass("highlight"))
+element.on("mouseleave", -> $(@).removeClass("highlight"))
 ```
 
 #### resize method

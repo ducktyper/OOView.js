@@ -156,7 +156,7 @@ class @Score
 ```
 
 #### @view.action
-You can set temp events under associated element using "action" method
+You can set one set of temp events to OOView object using "action" method
 ```coffeescript
 class @Score
   constructor: (@view)->
@@ -165,19 +165,24 @@ class @Score
   keyboardEdit: ->
     @view.action(@,
       "keypress": 'upDown'
+      "click .reset-score-editing-now": 'reset'
     )
 
   upDownKey: (e)->
     @setScore(@score() + 1) if e.which == 38 #up
     @setScore(@score() - 1) if e.which == 40 #down
 
+  reset: ->
+    @setScore(0)
   setScore: (score)->
     @view.find("input").val(score)
   score: ->
     parseInt(@view.find("input").val())
 ```
 Using this code, a user can use up and down key to change score
+and click reset-score-editing-now button to reset score
 after input field is focused.
+* action scope is global (e.g. .reset-score-editing-now can be outside of the 'score' view)
 * if no selector is given then it assign to "document" (e.g. "keypress")
 * activated action events can be removed by 3 ways
   * call another action method

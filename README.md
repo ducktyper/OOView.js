@@ -71,7 +71,6 @@ class Score
       "click .reset": 'reset'
       "click .plus":  'plusScore'
       "mouseenter":   -> $(@).addClass("highlight")
-      # => @view.element.on("mouseenter", -> $(@).addClass("highlight"))
       "mouseleave":   -> $(@).removeClass("highlight")
     )
 
@@ -87,8 +86,8 @@ class Score
 ```
 Codes above generate events below
 ```coffeescript
-element = $(".oo-score") element
-score   = 'Score' object associated with the element
+element = # $(".oo-score") element
+score   = # 'Score' object associated with the element
 
 element.on("click",
   ".reset, :not([class^='oo-']) .reset",

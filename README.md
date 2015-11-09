@@ -1,6 +1,49 @@
 ## OOView.js (Object-Oriented View in Javascript)
-OOView.js a jQuery plugin helps to automatically create javascript objects
+OOView.js a light (less than 200 lines) jQuery plugin helps
+to automatically create Javascript objects
 and bind to specified dom elements on initial and dynamic load.
+The code is written in Coffeescript but you can transpile it to Javascript
+and use it with Javascript, ES6 with Babel or any way you like.
+
+### How to use
+#### 1: Copy ooview.js.coffee to your project.
+(if you need Javascript file, one quick way to transpile is using
+'TRY COFFEESCRIPT' from coffeescript.org)
+
+#### 2: Create OOView HTML component (e.g. "score" component)
+```html
+<div class='oo-score' oo='{"score":10}'>
+// Content goes here
+</div>
+```
+Same Html can be generated from Javasript by calling
+```coffeescript
+html = $.oo.view("score", {score: 10}, "// Content goes here")
+```
+
+#### 3: Create OOView class and bind it
+```coffeescript
+class Score
+  constructor: (@view)->
+    @view.find("input").val(@view.data.score) # set initial score to 10
+    @view.events(@,
+      "click .reset": "reset"
+    )
+  reset:           -> setScore(0)
+  getScore:        -> @view.find("input").val()
+  setScore: (score)-> @view.find("input").val(score)
+
+$.oo.bind "score", Score
+```
+
+#### 4: Use OOView
+```coffeescript
+score = $(".oo-view").oo("getScore")
+$(".oo-view").oo("setScore", 5)
+obj = $(".oo-view").oo()
+obj.setScore(5)
+# click .reset button to set score to 0
+```
 
 ### Basic binding
 COFFEESCRIPT
@@ -65,11 +108,13 @@ $("body").ooPrepend('<div class="oo-score"></div>')
 You can set permanent events under associated element using "events" method.
 Syntax was influenced by backbone.js
 ```coffeescript
-class @Score
+class Score
   constructor: (@view)->
     @view.events(@,
       "click .reset": 'reset'
       "click .plus":  'plusScore'
+      "mouseenter":   -> $(@).addClass("highlight")
+      "mouseleave":   -> $(@).removeClass("highlight")
     )
 
   reset: ->
@@ -82,7 +127,22 @@ class @Score
   score: ->
     parseInt(@view.find("input").val())
 ```
-events method sets click events to reset and add score by one.
+Codes above generate events below
+```coffeescript
+element = # $(".oo-score") element
+score   = # 'Score' object associated with the element
+
+element.on("click",
+  ".reset, :not([class^='oo-']) .reset",
+  score["reset"].bind(score)
+)
+element.on("click",
+  ".plus, :not([class^='oo-']) .plus",
+  score["plusScore"].bind(score)
+)
+element.on("mouseenter", -> $(@).addClass("highlight"))
+element.on("mouseleave", -> $(@).removeClass("highlight"))
+```
 
 #### resize method
 Since window resize event is attached to window not the view,
@@ -97,7 +157,7 @@ class @Score
 ```
 
 #### @view.action
-You can set temp events under associated element using "action" method
+You can set one set of temp events to OOView object using "action" method
 ```coffeescript
 class @Score
   constructor: (@view)->
@@ -106,19 +166,24 @@ class @Score
   keyboardEdit: ->
     @view.action(@,
       "keypress": 'upDown'
+      "click .reset-score-editing-now": 'reset'
     )
 
   upDownKey: (e)->
     @setScore(@score() + 1) if e.which == 38 #up
     @setScore(@score() - 1) if e.which == 40 #down
 
+  reset: ->
+    @setScore(0)
   setScore: (score)->
     @view.find("input").val(score)
   score: ->
     parseInt(@view.find("input").val())
 ```
 Using this code, a user can use up and down key to change score
+and click reset-score-editing-now button to reset score
 after input field is focused.
+* action scope is global (e.g. .reset-score-editing-now can be outside of the 'score' view)
 * if no selector is given then it assign to "document" (e.g. "keypress")
 * activated action events can be removed by 3 ways
   * call another action method

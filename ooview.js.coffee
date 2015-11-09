@@ -37,7 +37,6 @@
 
   $.fn.oo =(method,args...)->
     return $.oo.instance(this) unless method?
-    return $.error("No OOView Method(#{method}) to undefined") if this.length == 0
     last_result = undefined
     this.each ->
       instance = $.oo.instance($(this))
@@ -88,10 +87,14 @@ class OOEvent
   add: (obj, rules)->
     for key, method of rules
       [action, selector] = @_readKey key
-      @element.on(action, @_directSelector(selector), convertMethod(obj, method))
+      if selector
+        @element.on(action, @_directSelector(selector), convertMethod(obj, method))
+      else
+        @element.on(action, convertMethod(obj, method))
 
   _readKey: (key)->
     split_index = key.indexOf ' '
+    return [key, null] if split_index == -1
     action      = key.substr 0, split_index
     selector    = key.substr split_index + 1
     [action, selector]
@@ -153,6 +156,3 @@ class OOAction
     action      = key.substr 0, split_index
     selector    = key.substr split_index + 1
     [action, selector]
-
-  _directSelector: (selector)->
-    selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")

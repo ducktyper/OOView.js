@@ -131,7 +131,7 @@ QUnit.test "action ends on clicking anywhere", (assert)->
 QUnit.test "action ends on esc", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  e = $.Event("keypress")
+  e = $.Event("keyup")
   e.which = 38 # up
   fixture.find("input").trigger(e)
   e.which = 27 # esc

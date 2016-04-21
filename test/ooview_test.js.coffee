@@ -128,7 +128,7 @@ QUnit.test "action ends on clicking anywhere", (assert)->
   fixture.find("input").trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
-QUnit.test "action ends on action method returing finish'", (assert)->
+QUnit.test "action ends when action method returns string, finish'", (assert)->
   beforeEach()
   fixture.find("input").focus()
   up = $.Event("keypress")

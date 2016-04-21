@@ -24,15 +24,15 @@ class EditScore
   constructor: (@oo)->
     @backup = @oo.score()
     @oo.view.action(@,
-      "keypress": "upDownKey"
+      "keypress": "keypress"
       "cancel":   "rollback"
     )
 
   rollback: ->
     @oo.setScore(@backup)
 
-  upDownKey: (e)->
-    if e.which == 38
-      @oo.setScore(@oo.score() + 1)
-    if e.which == 40
-      @oo.setScore(@oo.score() - 1)
+  keypress: (e)->
+    switch e.which
+      when 38 then @oo.setScore(@oo.score() + 1) # up
+      when 40 then @oo.setScore(@oo.score() - 1) # down
+      when 13 then "finish" # enter

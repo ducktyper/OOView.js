@@ -185,10 +185,11 @@ and click reset-score-editing-now button to reset score
 after input field is focused.
 * action scope is global (e.g. .reset-score-editing-now can be outside of the 'score' view)
 * if no selector is given then it assigns to "document" (e.g. "keypress")
-* activated action events can be removed by 3 ways
+* activated action events can be removed by 4 ways
   * call another action method
   * keyup ESC
   * click anywhere
+  * return "finish" from the action method
 
 ### Run tests
 Qunit is used to test OOView.js

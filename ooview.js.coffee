@@ -82,6 +82,12 @@ convertMethod = (obj, method)->
   else
     method
 
+convertActionMethod = (action, obj, method)->
+  bindedMethod = convertMethod(obj, method)
+  (e) ->
+    if bindedMethod(e) == "finish"
+      action.finish()
+
 class OOEvent
   constructor: (@element)->
   add: (obj, rules)->
@@ -124,7 +130,7 @@ class OOAction
   _parseRules: (rules)->
     new_rules = {}
     for k, v of rules
-      new_rules[k] = convertMethod(@obj, v)
+      new_rules[k] = convertActionMethod(@, @obj, v)
     new_rules
 
   _cancelOnEsc: (e)=>

@@ -184,7 +184,7 @@ Using this code, a user can use up and down key to change score
 and click reset-score-editing-now button to reset score
 after input field is focused.
 * action scope is global (e.g. .reset-score-editing-now can be outside of the 'score' view)
-* if no selector is given then it assign to "document" (e.g. "keypress")
+* if no selector is given then it assigns to "document" (e.g. "keypress")
 * activated action events can be removed by 3 ways
   * call another action method
   * keyup ESC

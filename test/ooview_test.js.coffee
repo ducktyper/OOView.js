@@ -134,7 +134,7 @@ QUnit.test "action ends when action method returns string, finish'", (assert)->
   up = $.Event("keypress")
   up.which = 38 # up
   enter = $.Event("keypress")
-  enter.which = 13 # up
+  enter.which = 13 # enter
   fixture.find("input").trigger(up)
   fixture.find("input").trigger(enter)
   assert.equal $(".oo-score").oo("score"), 10

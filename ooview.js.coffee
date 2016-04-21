@@ -132,8 +132,8 @@ class OOAction
 
   _defaultRules: ->
     @default_rules ||= {
-      "click":    @cancel.bind(@)
-      "keypress": @_cancelOnEsc.bind(@)
+      "click": @cancel.bind(@)
+      "keyup": @_cancelOnEsc.bind(@)
     }
 
   _onEvents: (rules)->

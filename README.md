@@ -187,7 +187,7 @@ after input field is focused.
 * if no selector is given then it assign to "document" (e.g. "keypress")
 * activated action events can be removed by 3 ways
   * call another action method
-  * press ESC key
+  * keyup ESC
   * click anywhere
 
 ### Run tests

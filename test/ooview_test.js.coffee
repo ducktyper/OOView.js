@@ -141,6 +141,15 @@ QUnit.test "action ends when action method returns string, finish'", (assert)->
   fixture.find("input").trigger(up)
   assert.equal $(".oo-score").oo("score"), 10
 
+QUnit.test "action accept finish callback", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  assert.equal $("input").is(":focus"), true
+  e = $.Event("keypress")
+  e.which = 13 # up
+  fixture.find("input").trigger(e)
+  assert.equal $("input").is(":focus"), false
+
 QUnit.test "action ends on esc", (assert)->
   beforeEach()
   fixture.find("input").focus()

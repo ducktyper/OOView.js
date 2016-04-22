@@ -121,10 +121,7 @@ class OOAction
     @_offEvents(@_defaultRules())
 
   finish: ->
-    @desctuctor()
-
-  cancel: ->
-    @cancel_action() if @cancel_action?
+    @finish_action() if @finish_action?
     @desctuctor()
 
   _parseRules: (rules)->
@@ -133,27 +130,27 @@ class OOAction
       new_rules[k] = convertActionMethod(@, @obj, v)
     new_rules
 
-  _cancelOnEsc: (e)=>
-    @cancel() if e.which == 27 #ESC
+  _finishOnEsc: (e)=>
+    @finish() if e.which == 27 #ESC
 
   _defaultRules: ->
     @default_rules ||= {
-      "click": @cancel.bind(@)
-      "keyup": @_cancelOnEsc.bind(@)
+      "click": @finish.bind(@)
+      "keyup": @_finishOnEsc.bind(@)
     }
 
   _onEvents: (rules)->
     for key, method of rules
       [action, selector] = @_readKey key
       switch action
-        when "cancel" then @cancel_action = method
+        when "finish" then @finish_action = method
         else $(selector).on(action, method)
 
   _offEvents: (rules)->
     for key, method of rules
       [action, selector] = @_readKey key
       switch action
-        when "cancel" then @cancel_action = undefined
+        when "finish" then @finish_action = undefined
         else $(selector).off(action, method)
 
   _readKey: (key)->

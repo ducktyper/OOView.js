@@ -25,11 +25,11 @@ class EditScore
     @backup = @oo.score()
     @oo.view.action(@,
       "keypress": "keypress"
-      "cancel":   "rollback"
+      "finish":   "blurOnFinish"
     )
 
-  rollback: ->
-    @oo.setScore(@backup)
+  blurOnFinish: ->
+    @oo.view.find("input").blur()
 
   keypress: (e)->
     switch e.which

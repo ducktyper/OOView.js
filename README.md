@@ -5,7 +5,7 @@ and bind to specified dom elements on initial and dynamic load.
 The code is written in Coffeescript but you can transpile it to Javascript
 and use it with Javascript, ES6 with Babel or any way you like.
 
-### 1 Min Tutorial
+### 1 Minute Tutorial
 #### 1: Copy ooview.js.coffee to your project.
 (if you need a Javascript file, one quick way to transpile is using
 'TRY COFFEESCRIPT' from coffeescript.org)
@@ -21,7 +21,7 @@ The same Html can be generated using javascipt.
 html = $.oo.view("score", {score: 10}, "// Content goes here")
 ```
 
-#### 3: Create OOView class and bind to the specific elements
+#### 3: Create OOView class and bind to specific elements
 
 ```coffeescript
 class Score
@@ -36,7 +36,7 @@ class Score
 
 $.oo.bind "score", Score
 ```
-After dom is loaded, OOView looks through `.oo-score` elements and binds a Score object to each of them.
+After dom is loaded, OOView looks through `.oo-score` elements and binds a new Score object to each of them.
 At first, each Score object reads the score data from `oo` attribute and sets it's value to the input field.
 And it attaches the click event to `.reset` element which resets the score to 0.
 
@@ -51,7 +51,7 @@ obj.setScore(5)
 # click .reset button to set score to 0
 ```
 
-You can call a OOView function of get the OOView object from jQuery element.
+You can call a OOView function or get the OOView object from a jQuery element.
 ```coffeescript
 $(".oo-[OOView name]").oo("[function name]", [first argument], [second argument], ...)
 ```
@@ -64,7 +64,7 @@ $(".oo-[OOView name]").oo()
 
 
 ### Full guide
-#### Bind OOView class to the specfic elements
+#### Bind OOView class to specfic elements
 
 COFFEESCRIPT
 ```coffeescript
@@ -77,7 +77,7 @@ HTML
 ```html
 <div class="oo-score"></div>
 ```
-`$.oo.bind` function looks dom elements having a class `oo-score`
+The function `$.oo.bind` looks dom elements having a class `oo-score`
 (by convention class name starts with `oo-`) and attaches a new Score object
 to each element found.
 Each Score class is initialized with OOView View object
@@ -101,13 +101,17 @@ HTML
   </div>
 </div>
 ```
-`@view.find` looks for elements under the dom associated with it by calling
-find function in jQuery. Only difference is that it does not search any child OOView
+The function `@view.find` looks for elements under the dom associated with it by calling
+`find` function in jQuery. Only difference is that it does not search any child OOView
 elements (class starts with "oo-") it contains.
-From the code example, the code `$(".score1").oo("inputField")` returns `.score1-input` not `score2-input`
+From the code example, the code `$(".score1").oo("inputField")` returns the input `score1-input` not `score2-input`
+
+* element
+The code `@view.element` returns the root jQuery element of the OOView object is attached such as `.oo-score`.
+Use it when you need a access to the root element.
 
 * events
-You can set permanent events under associated element using `events` function.
+You can set permanent events under the associated element using the function called `events`.
 The syntax was influenced by backbone.js
 ```coffeescript
 class Score
@@ -147,9 +151,9 @@ element.on("mouseleave", -> $(@).removeClass("highlight"))
 ```
 
 * action
-`action` function allows to attach an event to a document or element outside of
+The function `action` allows to attach an event to a document or element outside of
 the OOView element. To avoid these events to stay in the memory forever, the
-events will be removed by several actions including keyup ESC. You can also bind a function
+events will be removed by several actions including ESC keyup. You can also bind a function
 on finish to clear the action.
 
 A good example of using `action` function is to allow up and down buttons to a number

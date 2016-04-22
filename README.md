@@ -157,39 +157,45 @@ class @Score
 ```
 
 #### @view.action
-You can set one set of temp events to OOView object using "action" method
+OOView Action allows to attach an event to a document or element outside of
+the OOView element. To avoid these events to stay in the memory forever, the
+events will be removed on ESC or click anywhere. You can also bind a function
+on finish to clear the action.
+
+A good example of using OOView Action is to allow up and down button to a number
+field on focus and blur on finish.
+
 ```coffeescript
 class @Score
   constructor: (@view)->
-    @view.events(@, "focus input": 'keyboardEdit')
+    @view.events(@, "focus input": 'startEdit')
 
-  keyboardEdit: ->
+  startEdit: ->
     @view.action(@,
-      "keypress": 'upDown'
-      "click .reset-score-editing-now": 'reset'
+      "keypress": 'keypress'
+      "finish":   'blurInput'
     )
 
-  upDownKey: (e)->
-    @setScore(@score() + 1) if e.which == 38 #up
-    @setScore(@score() - 1) if e.which == 40 #down
+  keypress: (e)->
+    switch e.which
+      when 38 then @setScore(@score() + 1) # up
+      when 40 then @setScore(@score() - 1) # down
+      when 13 then "finish" # enter
 
-  reset: ->
-    @setScore(0)
+  blurInput: ->
+    @oo.view.find("input").blur()
+
   setScore: (score)->
     @view.find("input").val(score)
   score: ->
     parseInt(@view.find("input").val())
 ```
-Using this code, a user can use up and down key to change score
-and click reset-score-editing-now button to reset score
-after input field is focused.
-* action scope is global (e.g. .reset-score-editing-now can be outside of the 'score' view)
-* if no selector is given then it assigns to "document" (e.g. "keypress")
-* activated action events can be removed by 4 ways
-  * call another action method
-  * keyup ESC
-  * click anywhere
-  * return "finish" from the action method
+
+There are 4 ways to finish OOView Action.
+  * Call another action method
+  * Keyup ESC
+  * Click anywhere
+  * Return "finish" from the action method
 
 ### Run tests
 Qunit is used to test OOView.js

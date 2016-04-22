@@ -70,7 +70,7 @@ class OOView
     @event.add obj, rules
   action: (obj, rules)->
     @current_action.finish() if @current_action?
-    @current_action = new OOAction obj, rules
+    @current_action = new OOAction @, obj, rules
   find: (selector)->
     @element.find(@_directSelector(selector))
   _directSelector: (selector)->
@@ -85,6 +85,9 @@ convertMethod = (obj, method)->
 convertActionMethod = (action, obj, method)->
   bindedMethod = convertMethod(obj, method)
   (e) ->
+    if !$.contains(document.documentElement, action.view.element.get(0))
+      action.finish()
+      return
     if bindedMethod(e) == "finish"
       action.finish()
 
@@ -109,20 +112,17 @@ class OOEvent
     selector.split(",").map((s) -> ">#{s},:not([class^='oo-']) #{s}").join(",")
 
 class OOAction
-  constructor: (@obj, rules)->
+  constructor: (@view, @obj, rules)->
     @rules = @_parseRules(rules)
     @_onEvents(@rules)
     @_onEvents(@_defaultRules())
 
-  desctuctor: ->
-    return if @desctucted
-    @desctucted = true
+  finish: ->
+    return if @finished
+    @finished = true
+    @finish_action() if @finish_action?
     @_offEvents(@rules)
     @_offEvents(@_defaultRules())
-
-  finish: ->
-    @finish_action() if @finish_action?
-    @desctuctor()
 
   _parseRules: (rules)->
     new_rules = {}

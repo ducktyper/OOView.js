@@ -161,6 +161,17 @@ QUnit.test "@view.action: Finish on ESC keyup", (assert)->
   $(document).trigger(up)
   assert.equal $(".oo-score").oo("score"), 9
 
+QUnit.test "@view.action: Finish on trigger if the OOView element is removed", (assert)->
+  beforeEach()
+  fixture.find("input").focus()
+  e = $.Event("keypress")
+  e.which = 38 # up
+  input = fixture.find("input")
+  oo = $(".oo-score").oo()
+  $(".oo-score").remove()
+  $(document).trigger(e)
+  assert.equal oo.view.current_action.finished, true
+
 QUnit.test "@view.action: Allow one action at a time", (assert)->
   beforeEach()
   fixture.find("input").focus()

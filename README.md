@@ -110,6 +110,20 @@ From the code example, the code `$(".score1").oo("inputField")` returns the inpu
 The code `@view.element` returns the root jQuery element of the OOView object is attached such as `.oo-score`.
 Use it when you need a access to the root element.
 
+* data
+Data assigned to a `oo` attribute which can be accessed by calling `@view.data.[data name]`
+
+HTML
+```html
+<div class='oo-score' oo='{"score":10}'></div>
+```
+COFFEESCRIPT
+```coffeescript
+class Score
+  constructor: (@view)->
+    @view.find("input").val(@view.data.score)
+```
+
 * events
 You can set permanent events under the associated element using the function called `events`.
 The syntax was influenced by backbone.js

@@ -113,10 +113,10 @@ QUnit.test "@view.action: Can listen document events", (assert)->
   fixture.find("input").focus()
   e = $.Event("keypress")
   e.which = 38 # up
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   assert.equal $(".oo-score").oo("score"), 10
   e.which = 40 # down
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Finish on click anywhere", (assert)->
@@ -125,7 +125,7 @@ QUnit.test "@view.action: Finish on click anywhere", (assert)->
   $(".oo-score").click()
   e = $.Event("keypress")
   e.which = 38 # up
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Finish if binded function returns \"finish\"", (assert)->
@@ -135,19 +135,19 @@ QUnit.test "@view.action: Finish if binded function returns \"finish\"", (assert
   up.which = 38 # up
   enter = $.Event("keypress")
   enter.which = 13 # enter
-  fixture.find("input").trigger(up)
-  fixture.find("input").trigger(enter)
+  $(document).trigger(up)
+  $(document).trigger(enter)
   assert.equal $(".oo-score").oo("score"), 10
-  fixture.find("input").trigger(up)
+  $(document).trigger(up)
   assert.equal $(".oo-score").oo("score"), 10
 
 QUnit.test "@view.action: Call function binded to \"finish\" on finish", (assert)->
   beforeEach()
   fixture.find("input").focus()
   assert.equal $("input").is(":focus"), true
-  e = $.Event("keypress")
-  e.which = 13 # up
-  fixture.find("input").trigger(e)
+  enter = $.Event("keypress")
+  enter.which = 13 # enter
+  $(document).trigger(enter)
   assert.equal $("input").is(":focus"), false
 
 QUnit.test "@view.action: Finish on ESC keyup", (assert)->
@@ -155,9 +155,9 @@ QUnit.test "@view.action: Finish on ESC keyup", (assert)->
   fixture.find("input").focus()
   e = $.Event("keyup")
   e.which = 38 # up
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   e.which = 27 # esc
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Allow one action at a time", (assert)->
@@ -166,7 +166,7 @@ QUnit.test "@view.action: Allow one action at a time", (assert)->
   fixture.find("input").focus() # finish prev action
   e = $.Event("keypress")
   e.which = 38 # up
-  fixture.find("input").trigger(e)
+  $(document).trigger(e)
   assert.equal $(".oo-score").oo("score"), 10
 
 QUnit.test "#resize: Call on window resize", (assert)->

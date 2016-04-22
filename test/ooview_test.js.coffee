@@ -153,11 +153,12 @@ QUnit.test "@view.action: Call function binded to \"finish\" on finish", (assert
 QUnit.test "@view.action: Finish on ESC keyup", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  e = $.Event("keyup")
-  e.which = 38 # up
-  $(document).trigger(e)
-  e.which = 27 # esc
-  $(document).trigger(e)
+  esc = $.Event("keyup")
+  esc.which = 27 # esc
+  $(document).trigger(esc)
+  up = $.Event("keypress")
+  up.which = 38 # up
+  $(document).trigger(up)
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Allow one action at a time", (assert)->

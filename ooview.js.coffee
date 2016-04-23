@@ -115,29 +115,18 @@ class OOAction
   constructor: (@view, @obj, rules)->
     @rules = @_parseRules(rules)
     @_onEvents(@rules)
-    @_onEvents(@_defaultRules())
 
   finish: ->
     return if @finished
     @finished = true
     @finish_action() if @finish_action?
     @_offEvents(@rules)
-    @_offEvents(@_defaultRules())
 
   _parseRules: (rules)->
     new_rules = {}
     for k, v of rules
       new_rules[k] = convertActionMethod(@, @obj, v)
     new_rules
-
-  _finishOnEsc: (e)=>
-    @finish() if e.which == 27 #ESC
-
-  _defaultRules: ->
-    @default_rules ||= {
-      "click": @finish.bind(@)
-      "keyup": @_finishOnEsc.bind(@)
-    }
 
   _onEvents: (rules)->
     for key, method of rules

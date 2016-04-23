@@ -26,6 +26,7 @@ class EditScore
     @oo.view.action(@,
       "keypress": "keypress"
       "finish":   "blurInput"
+      "click":    -> "finish"
     )
 
   keypress: (e)->

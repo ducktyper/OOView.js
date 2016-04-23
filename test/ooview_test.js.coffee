@@ -139,13 +139,6 @@ QUnit.test "@view.action: Call function binded to \"finish\" on finish", (assert
   $(document).trigger($.Event( "keypress", {which: 13})) # ENTER
   assert.equal $("input").is(":focus"), false
 
-QUnit.test "@view.action: Finish on ESC keyup", (assert)->
-  beforeEach()
-  fixture.find("input").focus()
-  $(document).trigger($.Event( "keyup", {which: 27})) # ESC
-  $(document).trigger($.Event( "keypress", {which: 38})) # UP
-  assert.equal $(".oo-score").oo("score"), 9
-
 QUnit.test "@view.action: Finish on trigger if the OOView element is removed", (assert)->
   beforeEach()
   fixture.find("input").focus()

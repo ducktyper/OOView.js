@@ -166,9 +166,9 @@ element.on("mouseleave", -> $(@).removeClass("highlight"))
 
 * action
 The function `action` allows to attach an event to a document or element outside of
-the OOView element. To avoid these events to stay in the memory forever, the
-events will be removed by several actions including ESC keyup. You can also bind a function
-on finish to clear the action.
+the OOView element. To avoid these events to stay in the memory forever, you need
+to make sure you finish the action. You can finish an action by return "finish"
+from assigned function.
 
 A good example of using `action` function is to allow up and down buttons to a number
 field on focus and blur on finish.
@@ -182,6 +182,7 @@ class @Score
     @view.action(@,
       "keypress": 'keypress'
       "finish":   'blurInput'
+      "click":    -> "finish"
     )
 
   keypress: (e)->
@@ -198,12 +199,6 @@ class @Score
   score: ->
     parseInt(@view.find("input").val())
 ```
-
-There are 4 ways to finish `action`.
-  * Call another `action` function
-  * Keyup ESC
-  * Click anywhere
-  * Return "finish" from the function binded in a `action` function
 
 #### Get OOView object from jQuery element
 ```coffeescript

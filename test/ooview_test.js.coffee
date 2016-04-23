@@ -111,12 +111,9 @@ QUnit.test "@view.events: Do not call function triggered from a child OOView ele
 QUnit.test "@view.action: Can listen document events", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  e = $.Event("keypress")
-  e.which = 38 # up
-  $(document).trigger(e)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal $(".oo-score").oo("score"), 10
-  e.which = 40 # down
-  $(document).trigger(e)
+  $(document).trigger($.Event( "keypress", {which: 40})) # DOWN
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Finish on click anywhere", (assert)->
@@ -131,54 +128,40 @@ QUnit.test "@view.action: Finish on click anywhere", (assert)->
 QUnit.test "@view.action: Finish if binded function returns \"finish\"", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  up = $.Event("keypress")
-  up.which = 38 # up
-  enter = $.Event("keypress")
-  enter.which = 13 # enter
-  $(document).trigger(up)
-  $(document).trigger(enter)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
+  $(document).trigger($.Event( "keypress", {which: 13})) # ENTER
   assert.equal $(".oo-score").oo("score"), 10
-  $(document).trigger(up)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal $(".oo-score").oo("score"), 10
 
 QUnit.test "@view.action: Call function binded to \"finish\" on finish", (assert)->
   beforeEach()
   fixture.find("input").focus()
   assert.equal $("input").is(":focus"), true
-  enter = $.Event("keypress")
-  enter.which = 13 # enter
-  $(document).trigger(enter)
+  $(document).trigger($.Event( "keypress", {which: 13})) # ENTER
   assert.equal $("input").is(":focus"), false
 
 QUnit.test "@view.action: Finish on ESC keyup", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  esc = $.Event("keyup")
-  esc.which = 27 # esc
-  $(document).trigger(esc)
-  up = $.Event("keypress")
-  up.which = 38 # up
-  $(document).trigger(up)
+  $(document).trigger($.Event( "keyup", {which: 27})) # ESC
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Finish on trigger if the OOView element is removed", (assert)->
   beforeEach()
   fixture.find("input").focus()
-  e = $.Event("keypress")
-  e.which = 38 # up
   input = fixture.find("input")
   oo = $(".oo-score").oo()
   $(".oo-score").remove()
-  $(document).trigger(e)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal oo.view.current_action.finished, true
 
 QUnit.test "@view.action: Allow one action at a time", (assert)->
   beforeEach()
   fixture.find("input").focus()
   fixture.find("input").focus() # finish prev action
-  e = $.Event("keypress")
-  e.which = 38 # up
-  $(document).trigger(e)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal $(".oo-score").oo("score"), 10
 
 QUnit.test "#resize: Call on window resize", (assert)->

@@ -120,9 +120,7 @@ QUnit.test "@view.action: Finish on click anywhere", (assert)->
   beforeEach()
   fixture.find("input").focus()
   $(".oo-score").click()
-  e = $.Event("keypress")
-  e.which = 38 # up
-  $(document).trigger(e)
+  $(document).trigger($.Event( "keypress", {which: 38})) # UP
   assert.equal $(".oo-score").oo("score"), 9
 
 QUnit.test "@view.action: Finish if binded function returns \"finish\"", (assert)->

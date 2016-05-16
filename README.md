@@ -1,9 +1,8 @@
 ## OOView.js (Object-Oriented View in Javascript)
-OOView.js a light (less than 200 lines) jQuery plugin helps
-to automatically create Javascript objects
-and bind to specified dom elements on initial and dynamic load.
-The code is written in Coffeescript but you can transpile it to Javascript
-and use it with Javascript, ES6 with Babel or any way you like.
+OOView.js a lightweight (less than 200 lines) jQuery plugin helps
+to write component based Javascript code. It provides a way to
+find elements and assign events within the partial view and also
+provides a way to communicate with other components.
 
 ### 1 Minute Tutorial
 #### 1: Copy ooview.js.coffee to your project.
@@ -83,7 +82,7 @@ to each element found.
 Each Score class is initialized with OOView View object
 
 #### OOView View functions
-* find
+##### @view.find
 COFFEESCRIPT
 ```coffeescript
 class Score
@@ -106,11 +105,11 @@ The function `@view.find` looks for elements under the dom associated with it by
 elements (class starts with "oo-") it contains.
 From the code example, the code `$(".score1").oo("inputField")` returns the input `score1-input` not `score2-input`
 
-* element
+##### @view.element
 The code `@view.element` returns the root jQuery element of the OOView object is attached such as `.oo-score`.
 Use it when you need a access to the root element.
 
-* data
+##### @view.data
 Data assigned to a `oo` attribute which can be accessed by calling `@view.data.[data name]`
 
 HTML
@@ -124,7 +123,7 @@ class Score
     @view.find("input").val(@view.data.score)
 ```
 
-* events
+##### @view.events
 You can set permanent events under the associated element using the function called `events`.
 The syntax was influenced by backbone.js
 ```coffeescript
@@ -164,11 +163,11 @@ element.on("mouseenter", -> $(@).addClass("highlight"))
 element.on("mouseleave", -> $(@).removeClass("highlight"))
 ```
 
-* action
+##### @view.action
 The function `action` allows to attach an event to a document or element outside of
 the OOView element. To avoid these events to stay in the memory forever, you need
 to make sure you finish the action. You can finish an action by return "finish"
-from assigned function.
+from the assigned function.
 
 A good example of using `action` function is to allow up and down buttons to a number
 field on focus and blur on finish.
@@ -221,7 +220,7 @@ $("body").ooPrepend('<div class="oo-score"></div>')
 Since window resize event is attached to window not the view,
 the event will survive after view is removed from the dom.
 Instead OOView listens to window resize event and sends resize function to
-each oo objects if resize function is defined.
+each oo objects if the resize function is defined.
 ```coffeescript
 class @Score
   constructor: (@view)->

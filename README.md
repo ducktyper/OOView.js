@@ -35,9 +35,9 @@ class Score
 
 $.oo.bind "score", Score
 ```
-After dom is loaded, OOView looks through `.oo-score` elements and binds a new Score object to each of them.
-At first, each Score object reads the score data from `oo` attribute and sets it's value to the input field.
-And it attaches the click event to `.reset` element which resets the score to 0.
+After dom is loaded, OOView looks through `.oo-score` elements and binds the new Score object to each of them.
+At first, each Score object reads the score data from the `oo` attribute and sets it's value to the input field.
+And it attaches the click event to the `.reset` element which resets the score to 0.
 
 #### 4: Interact with OOView objects through jQuery elements
 
@@ -50,20 +50,20 @@ obj.setScore(5)
 # click .reset button to set score to 0
 ```
 
-You can call a OOView function or get the OOView object from a jQuery element.
+You can call the OOView function or get the OOView object from a jQuery element.
 ```coffeescript
-$(".oo-[OOView name]").oo("[function name]", [first argument], [second argument], ...)
+$(".oo-[OOVIEW_NAME]").oo(FUNCTION_NAME, ARGUMENT1, ARGUMENT2, ...)
 ```
-* Find OOView elements and execute a function to each of them with argnuments.
+* Find OOView elements and execute the function to each of them with argnuments.
 
 ```coffeescript
-$(".oo-[OOView name]").oo()
+$(".oo-[OOVIEW_NAME]").oo()
 ```
-* Get an OOView obejct from the first OOView element.
+* Get the OOView obejct from the first OOView element found.
 
 
 ### Full guide
-#### Bind OOView class to specfic elements
+#### Bind OOView objects to the view
 
 COFFEESCRIPT
 ```coffeescript
@@ -76,10 +76,9 @@ HTML
 ```html
 <div class="oo-score"></div>
 ```
-The function `$.oo.bind` looks dom elements having a class `oo-score`
-(by convention class name starts with `oo-`) and attaches a new Score object
+The function `$.oo.bind` looks dom elements having the class `oo-score`
+(the value of the OOView class starts with `oo-`) and attaches the new Score object
 to each element found.
-Each Score class is initialized with OOView View object
 
 #### OOView View functions
 ##### @view.find
@@ -102,15 +101,15 @@ HTML
 ```
 The function `@view.find` looks for elements under the dom associated with it by calling
 `find` function in jQuery. Only difference is that it does not search any child OOView
-elements (class starts with "oo-") it contains.
-From the code example, the code `$(".score1").oo("inputField")` returns the input `score1-input` not `score2-input`
+elements it contains.
+From the code example, the code `$(".score1").oo("inputField")` returns the input `score1-input` not `score2-input`.
 
 ##### @view.element
-The code `@view.element` returns the root jQuery element of the OOView object is attached such as `.oo-score`.
-Use it when you need a access to the root element.
+The code `@view.element` returns the root jQuery element where the OOView object is attached to such as `.oo-score`.
+Use this when you need an access to the root element.
 
 ##### @view.data
-Data assigned to a `oo` attribute which can be accessed by calling `@view.data.[data name]`
+Data assigned to the `oo` attribute which can be accessed by calling `@view.data.[DATE_NAME]`
 
 HTML
 ```html
@@ -146,7 +145,7 @@ class Score
   score: ->
     parseInt(@view.find("input").val())
 ```
-Codes above generate events below
+The codes above generate the events below
 ```coffeescript
 element = # $(".oo-score") element
 score   = # 'Score' object associated with the element
@@ -164,13 +163,14 @@ element.on("mouseleave", -> $(@).removeClass("highlight"))
 ```
 
 ##### @view.action
-The function `action` allows to attach an event to a document or element outside of
-the OOView element. To avoid these events to stay in the memory forever, you need
-to make sure you finish the action. You can finish an action by return "finish"
-from the assigned function.
+The function `action` allows to define a temporary event. Different from the `event`
+method, you can assign events to the document or any element in the document.
+To avoid these events to stay in the memory forever, you need
+to make sure you define when to finish the action. You can finish the action by
+returning the string "finish" from the assigned function.
 
-A good example of using `action` function is to allow up and down buttons to a number
-field on focus and blur on finish.
+A good example of using the `action` feature is to allow editing a number field
+using up and down buttons.
 
 ```coffeescript
 class @Score
@@ -217,10 +217,9 @@ $("body").ooPrepend('<div class="oo-score"></div>')
 ```
 
 #### resize function
-Since window resize event is attached to window not the view,
-the event will survive after view is removed from the dom.
-Instead OOView listens to window resize event and sends resize function to
-each oo objects if the resize function is defined.
+You can define the `resize` function to handle the resize
+event.
+
 ```coffeescript
 class @Score
   constructor: (@view)->
